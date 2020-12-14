@@ -5,16 +5,16 @@ require 'nokogiri'
 require 'faraday'
 
 module Compliment
-  $url = 'http://kompli.me/%ef%bb%bfkomplimenty-devushke'
-  $url2 = 'http://kompli.me/%ef%bb%bfkomplimenty-devushke/page/2'
-  $url3 = 'http://kompli.me/%ef%bb%bfkomplimenty-devushke/page/3'
+  URL = 'http://kompli.me/%ef%bb%bfkomplimenty-devushke'
+  URL2 = 'http://kompli.me/%ef%bb%bfkomplimenty-devushke/page/2'
+  URL3 = 'http://kompli.me/%ef%bb%bfkomplimenty-devushke/page/3'
 
-  $array_text_girl = []
+  ARRAY_TEXT_GIRL = []
 
   def compliment_girl(url)
     page = Faraday.get url
     page = page.body
     nokogiri_object = Nokogiri.HTML(page)
-    nokogiri_object.css('.post-card__title a').each { |tag| $array_text_girl << tag.text }
+    nokogiri_object.css('.post-card__title a').each { |tag| ARRAY_TEXT_GIRL << tag.text }
   end
 end

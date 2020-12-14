@@ -2,25 +2,34 @@
 require 'telegram/bot'
 require_relative 'compliment'
 include Compliment
+require 'dotenv/load'
 
-token = '1202538978:AAHb7g8D-JXtzVLAdp5y3X1o_gPk3JKuEEw'
+Dotenv.load('TOKEN.env')
+COMANDS = {
+  start: '/start', stop: '/stop', help: '/help', complimetn: '/comp'
+}.freeze
+puts COMANDS[:complimetn]
+compliment_girl(URL)
+compliment_girl(URL2)
+compliment_girl(URL3)
+text_help = <<-TEXT
+Для начала общения #{COMANDS[:start]}
+Для завершения #{COMANDS[:stop]}
+Получить комплимент #{COMANDS[:complimetn]}
+TEXT
 
-list_comand = ' /start, /stop - остановить бота, /help - список команд, /comp - комплименты девушке.'
-compliment_girl($url)
-compliment_girl($url2)
-compliment_girl($url3)
-
-Telegram::Bot::Client.run(token) do |bot|
+Telegram::Bot::Client.run(ENV['TOKEN']) do |bot|
   bot.listen do |message|
     case message.text
-    when '/start'
+    when COMANDS[:start]
       bot.api.send_message(chat_id: message.chat.id, text: "Hello, #{message.from.first_name}")
-    when '/stop'
+    when COMANDS[:stop]
       bot.api.send_message(chat_id: message.chat.id, text: "Bye, #{message.from.first_name}")
-    when '/comp'
-      bot.api.send_message(chat_id: message.chat.id, text: "#{$array_text_girl.sample}")
     when '/help'
-      bot.api.send_message(chat_id: message.chat.id, text: list_comand)
+    when COMANDS[:complimetn]
+      bot.api.send_message(chat_id: message.chat.id, text: "#{ARRAY_TEXT_GIRL.sample}")
+    when COMANDS[:help]
+      bot.api.send_message(chat_id: message.chat.id, text: text_help)
     else
       bot.api.send_message(chat_id: message.chat.id, text: "Нет такой команды. Введите /help для прсомотра доступных команд")
     end
